@@ -1,7 +1,12 @@
+import PlayerLayout from '../components/PlayerLayout';
 import '../styles/global.css'
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+const MyApp = ({ Component, pageProps }) => {
+  return (
+    <PlayerLayout>
+      <Component {...pageProps} />
+    </PlayerLayout>
+  );
 }
 
 export default MyApp;
