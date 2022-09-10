@@ -1,113 +1,78 @@
 import { useState } from 'react';
-import { createStyles, Navbar, Group, Code, Title } from '@mantine/core';
+import { createStyles, Navbar, Group, Code, Title, ScrollArea } from '@mantine/core';
 import {
     IconHome,
     IconBooks,
-    IconFileMusic
+    IconFileMusic,
+    IconPlus
 } from '@tabler/icons';
+import { LinksGroup } from './CollapsibleLinks';
 
-const useStyles = createStyles((theme, _params, getRef) => {
-    const icon = getRef('icon');
-    return {
-        navbar: {
-            backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
-                .background,
-        },
+const useStyles = createStyles((theme, _params, getRef) => ({
+    navbar: {
+        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
+        paddingBottom: 0,
+    },
 
-        version: {
-            backgroundColor: theme.fn.lighten(
-                theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background,
-                0.1
-            ),
-            color: theme.white,
-            fontWeight: 700,
-        },
+    header: {
+        padding: theme.spacing.md,
+        paddingTop: 0,
+        marginLeft: -theme.spacing.md,
+        marginRight: -theme.spacing.md,
+        color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+        borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+            }`,
+    },
 
-        header: {
-            paddingBottom: theme.spacing.md,
-            marginBottom: theme.spacing.md * 1.5,
-            borderBottom: `1px solid ${theme.fn.lighten(
-                theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background,
-                0.1
-            )}`,
-        },
+    links: {
+        marginLeft: -theme.spacing.md,
+        marginRight: -theme.spacing.md,
+    },
 
-        link: {
-            ...theme.fn.focusStyles(),
-            display: 'flex',
-            alignItems: 'center',
-            textDecoration: 'none',
-            fontSize: theme.fontSizes.sm,
-            color: theme.white,
-            padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
-            borderRadius: theme.radius.sm,
-            fontWeight: 500,
+    linksInner: {
+        paddingTop: theme.spacing.xl,
+        paddingBottom: theme.spacing.xl,
+    },
 
-            '&:hover': {
-                backgroundColor: theme.fn.lighten(
-                    theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background,
-                    0.1
-                ),
-            },
-        },
+    footer: {
+        marginLeft: -theme.spacing.md,
+        marginRight: -theme.spacing.md,
+        borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+            }`,
+    },
+}))
 
-        linkIcon: {
-            ref: icon,
-            color: theme.white,
-            opacity: 0.75,
-            marginRight: theme.spacing.md,
-        },
-
-        linkActive: {
-            '&, &:hover': {
-                backgroundColor: theme.fn.lighten(
-                    theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background,
-                    0.15
-                ),
-                [`& .${icon}`]: {
-                    opacity: 0.9,
-                },
-            },
-        },
-    };
-});
-
-const data = [
+const navLinks = [
     { link: '', label: 'Home', icon: IconHome },
     { link: '', label: 'Your Library', icon: IconBooks },
-    { link: '', label: 'Playlists', icon: IconFileMusic },
+    { link: '', label: 'Create Playlist', icon: IconPlus },
+    {
+        link: '', label: 'Playlists', icon: IconFileMusic, links: [
+            { label: 'Playlist 1', link: '/' },
+            { label: 'Playlist 2', link: '/' },
+            { label: 'Playlist 3', link: '/' },
+            { label: 'Playlist 4', link: '/' },
+        ],
+    },
 ];
 
 
 const Sidebar = () => {
 
-    const { classes, cx } = useStyles();
-    const [active, setActive] = useState('Home');
-
-    const links = data.map((item) => (
-        <a
-            className={cx(classes.link, { [classes.linkActive]: item.label === active })}
-            href={item.link}
-            key={item.label}
-            onClick={(event) => {
-                event.preventDefault();
-                setActive(item.label);
-            }}
-        >
-            <item.icon className={classes.linkIcon} stroke={1.5} />
-            <span>{item.label}</span>
-        </a>
-    ));
-
+    const { classes } = useStyles();
+    const links = navLinks.map((item) => <LinksGroup {...item} key={item.label} />);
 
     return (
-        <Navbar height={'100%'} width={{ sm: 300 }} p="md" className={classes.navbar}>
-            <Navbar.Section grow>
-                <Group className={classes.header} position="apart">
-                    <Title order={2} color='white'>Euphonia</Title>
-                    <Code className={classes.version}>v0.0.1</Code>
+        <Navbar height="100%" width={{ sm: 300 }} p="md" className={classes.navbar}>
+            <Navbar.Section className={classes.header}>
+                <Group position="apart">
+                    <Title order={1} size="h3">Euphonia</Title>
+                    <Code sx={{ fontWeight: 700 }}>v0.0.1</Code>
                 </Group>
-                {links}
+            </Navbar.Section>
+
+            <Navbar.Section grow className={classes.links} component={ScrollArea}>
+                <div className={classes.linksInner}>{links}</div>
             </Navbar.Section>
         </Navbar>
     )
