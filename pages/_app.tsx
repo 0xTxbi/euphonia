@@ -1,12 +1,23 @@
+import { AppProps } from 'next/app';
+import { MantineProvider } from '@mantine/core';
 import PlayerLayout from '../components/PlayerLayout';
-import '../styles/global.css'
 
-const MyApp = ({ Component, pageProps }) => {
+export default function App(props: AppProps) {
+  const { Component, pageProps } = props;
+
   return (
-    <PlayerLayout>
-      <Component {...pageProps} />
-    </PlayerLayout>
+
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{
+        colorScheme: 'dark',
+      }}
+    >
+      <PlayerLayout>
+        <Component {...pageProps} />
+      </PlayerLayout>
+    </MantineProvider>
+
   );
 }
-
-export default MyApp;

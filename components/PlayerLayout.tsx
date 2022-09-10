@@ -1,17 +1,18 @@
 import React from 'react'
+import Sidebar from './Sidebar'
 
 const PlayerLayout = ({ children }) => {
     return (
         <div className='w-screen h-screen'>
-            <div className='flex h-4/5'>
+            <div className='flex h-5/6'>
                 <div className='w-1/3'>
-                    app sidebar
+                    <Sidebar />
                 </div>
                 <div className='w-2/3'>
-                    app content
+                    {children}
                 </div>
             </div>
-            <div className='h-1/5'>
+            <div className='h-1/6'>
                 app player
             </div>
         </div>
