@@ -5,6 +5,8 @@ import { artistsData } from './songsData'
 const prisma = new PrismaClient()
 
 const run = async () => {
+
+    // Artist data
     await Promise.all(artistsData.map(async (artist) => {
         return prisma.artist.upsert({
             where: { name: artist.name },
@@ -22,6 +24,7 @@ const run = async () => {
         })
     }))
 
+    // User data
     const salt = bcrypt.genSaltSync()
     const user = await prisma.user.upsert({
         where: { email: 'user@euphonia.io' },
@@ -32,6 +35,26 @@ const run = async () => {
             name: 'Joseph David'
         }
     })
+
+    // Songs data
+    const songs = await prisma.song.findMany({})
+    // Create array of 10 playlists
+    await Promise.all(new Array(10).fill(1).map(async (_, i) => {
+        return prisma.playlist.create({
+            data: {
+                name: `Playlist #${i + 1}`,
+                user: {
+                    connect: { id: user.id }
+                },
+                songs: {
+                    connect: songs.map((song) => ({
+                        id: song.id
+                    }))
+                }
+            }
+        })
+    }))
+
 }
 
 run()
