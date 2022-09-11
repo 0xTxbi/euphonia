@@ -1,9 +1,9 @@
-import { AppProps } from 'next/app';
-import { MantineProvider } from '@mantine/core';
+import {AppProps} from 'next/app';
+import {MantineProvider} from '@mantine/core';
 import PlayerLayout from '../components/PlayerLayout';
 
 export default function App(props: AppProps) {
-  const { Component, pageProps } = props;
+  const {Component, pageProps} = props;
 
   return (
 
@@ -14,9 +14,15 @@ export default function App(props: AppProps) {
         colorScheme: 'dark',
       }}
     >
-      <PlayerLayout>
+      {/* Display layout if page isn't an authentication page */}
+      {Component.isAuthPage ? (
         <Component {...pageProps} />
-      </PlayerLayout>
+      ) : (
+        <PlayerLayout>
+          <Component {...pageProps} />
+        </PlayerLayout>
+      )}
+
     </MantineProvider>
 
   );
