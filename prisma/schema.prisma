@@ -26,7 +26,9 @@ model Song {
   name      String
   artist    Artist     @relation(fields: [artistId], references: [id])
   artistId  Int
+  duration  Int
   playlists Playlist[]
+  url       String
 }
 
 // Artist schema
@@ -45,6 +47,6 @@ model Playlist {
   updatedAt DateTime @updatedAt
   name      String
   songs     Song[]
-  user      User?    @relation(fields: [userId], references: [id])
-  userId    Int?
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
 }
