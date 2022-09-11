@@ -7,10 +7,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// User schema
 model User {
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  email     String     @unique
+  password  String
+  name      String
+  playlists Playlist[]
+}
+
+// Song schema
+model Song {
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  name      String
+  artist    Artist     @relation(fields: [artistId], references: [id])
+  artistId  Int
+  playlists Playlist[]
+}
+
+// Artist schema
+model Artist {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  email     String   @unique
-  password  String
+  songs     Song[]
+  name      String   @unique
+}
+
+// Playlist schema
+model Playlist {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  songs     Song[]
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
 }
