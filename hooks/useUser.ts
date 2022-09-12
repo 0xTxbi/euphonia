@@ -1,14 +1,16 @@
 import useSWR from "swr"
 import { fetcher } from "../lib/fetcher"
 
-export const usePlaylists = () => {
+export const useUser = () => {
 
     const { data, error } = useSWR('/me', fetcher)
 
     return {
-        playlists: data,
+        user: data,
         isLoading: !data && !error,
         isError: error
     }
 
 }
+
+export default useUser

@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import { createStyles, Navbar, Group, Code, Title, ScrollArea } from '@mantine/core';
+import { createStyles, Navbar, Group, Code, Title, ScrollArea, Divider, Loader, LoadingOverlay } from '@mantine/core';
 import {
     IconHome,
     IconBooks,
     IconFileMusic,
-    IconPlus
+    IconPlus,
+    IconPlaylistAdd,
+    IconVinyl
 } from '@tabler/icons';
 import { LinksGroup } from './CollapsibleLinks';
+import { usePlaylists } from '../hooks/usePlaylist';
 
 const useStyles = createStyles((theme, _params, getRef) => ({
     navbar: {
@@ -34,6 +37,10 @@ const useStyles = createStyles((theme, _params, getRef) => ({
         paddingBottom: theme.spacing.xl,
     },
 
+    customScrollArea: {
+        height: '100vh'
+    },
+
     footer: {
         marginLeft: -theme.spacing.md,
         marginRight: -theme.spacing.md,
@@ -45,22 +52,29 @@ const useStyles = createStyles((theme, _params, getRef) => ({
 const navLinks = [
     { link: '', label: 'Home', icon: IconHome },
     { link: '', label: 'Your Library', icon: IconBooks },
-    { link: '', label: 'Create Playlist', icon: IconPlus },
-    {
-        link: '', label: 'Playlists', icon: IconFileMusic, links: [
-            { label: 'Playlist 1', link: '/' },
-            { label: 'Playlist 2', link: '/' },
-            { label: 'Playlist 3', link: '/' },
-            { label: 'Playlist 4', link: '/' },
-        ],
-    },
+    { link: '', label: 'Create Playlist', icon: IconPlaylistAdd },
+    { link: '', label: 'Playlists', icon: IconFileMusic }
 ];
+
+const playListLinksRaw = []
 
 
 const Sidebar = () => {
 
     const { classes } = useStyles();
-    const links = navLinks.map((item) => <LinksGroup {...item} key={item.label} />);
+    const { playlists, isLoading, isError } = usePlaylists()
+
+    if (playlists.length !== 0) {
+        playlists.map((playlist) => {
+            playListLinksRaw.push({ id: playlist.id, link: '', label: playlist.name, icon: IconVinyl })
+        })
+    }
+
+    const links = navLinks.map((link) => <LinksGroup {...link} key={link.label} />);
+    const playlistLinks = playListLinksRaw.map((playlist) => <LinksGroup {...playlist} key={playlist.id} />)
+
+    console.log(playlists, isError, isLoading)
+    console.log(playListLinksRaw)
 
     return (
         <Navbar height="100%" width={{ sm: 300 }} p="md" className={classes.navbar}>
@@ -73,6 +87,16 @@ const Sidebar = () => {
 
             <Navbar.Section grow className={classes.links} component={ScrollArea}>
                 <div className={classes.linksInner}>{links}</div>
+                <Divider />
+                <ScrollArea className={classes.customScrollArea}>
+                    {isLoading ? (
+                        <div className={classes.linksInner}>
+                            <LoadingOverlay visible />
+                        </div>) : (
+                        <div className={classes.linksInner}>{playlistLinks}</div>
+                    )}
+                </ScrollArea>
+
             </Navbar.Section>
         </Navbar>
     )

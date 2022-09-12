@@ -6,9 +6,11 @@ export const usePlaylists = () => {
     const { data, error } = useSWR('/playlists', fetcher)
 
     return {
-        playlists: data || [],
+        playlists: (data as any) || [],
         isLoading: !data && !error,
         isError: error
     }
 
 }
+
+export default usePlaylists
