@@ -2,12 +2,12 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 import cookie from 'cookie'
 import prisma from '../../lib/prisma';
-import { NextApiRequest, NextApiResponse } from 'next';
+import {NextApiRequest, NextApiResponse} from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const salt = bcrypt.genSaltSync()
-    const { name, email, password } = req.body
+    const {name, email, password} = req.body
 
     let user
 
@@ -37,7 +37,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     res.setHeader(
         'Set-Cookie',
-        cookie.serialize('EUPHONIA-ACCESS-TOKEN',
+        cookie.serialize('EUPHONIA_ACCESS_TOKEN',
             token, {
             httpOnly: true,
             maxAge: 8 * 60 * 60,
