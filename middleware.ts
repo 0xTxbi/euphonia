@@ -1,8 +1,8 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 const authenticatedPages = ['/', '/playlist', 'library']
 
-export const middleware = (req: NextRequest) => {
+export const middleware = (req) => {
 
     if (authenticatedPages.find((page) => page === req.nextUrl.pathname)) {
 
@@ -10,7 +10,9 @@ export const middleware = (req: NextRequest) => {
 
         // Redirect to login page if unauthorised
         if (!token) {
-            return NextResponse.redirect('/login')
+            const url = req.nextUrl.clone()
+            url.pathname = '/login'
+            return NextResponse.redirect(url)
         }
 
     }
