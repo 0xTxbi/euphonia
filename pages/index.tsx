@@ -1,26 +1,30 @@
-import React from 'react'
 import GradientHeader from '../components/GradientHeader'
-import { Badge, Box, Button, Card, Group, Image, Text, Title, Container, SimpleGrid } from '@mantine/core';
+import { Box, Group, Skeleton, Title } from '@mantine/core';
 import prisma from '../lib/prisma';
 import ArtistCard from '../components/ArtistCard';
+import useUser from '../hooks/useUser';
+import SkeletonLoader from '../components/SkeletonLoader';
 
 const Home = ({ artists }) => {
 
-  console.log(artists)
+  const { user, isLoading } = useUser()
 
   return (
     <Box>
-      <GradientHeader />
+      <SkeletonLoader loading={isLoading}>
+        <GradientHeader name={user?.name} />
+      </SkeletonLoader>
 
       <Box mt={20}>
         <Title order={3}>Your Top Artists</Title>
 
-        <Group mt={10}>
+        <Group mt={10} spacing='md'>
           {artists.map((artist) => (
-            <ArtistCard name={artist.name} />
+            <ArtistCard name={artist?.name} image={artist?.image} key={artist?.id} />
           ))}
         </Group>
       </Box>
+
 
     </Box>
   )
@@ -29,7 +33,6 @@ const Home = ({ artists }) => {
 export const getServerSideProps = async () => {
 
   const artists = await prisma.artist.findMany({})
-  console.log(artists)
 
   return {
     props: {

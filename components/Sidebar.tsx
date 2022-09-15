@@ -63,7 +63,7 @@ const playListLinksRaw = []
 const Sidebar = () => {
 
     const { classes } = useStyles();
-    const { playlists, isLoading, isError } = usePlaylists()
+    const { playlists, isLoading } = usePlaylists()
 
     if (playlists.length !== 0) {
         playlists.map((playlist) => {

@@ -3,7 +3,7 @@ import { fetcher } from "../lib/fetcher"
 
 export const useUser = () => {
 
-    const { data, error } = useSWR('/me', fetcher)
+    const { data, error } = useSWR('/user', fetcher)
 
     return {
         user: data,

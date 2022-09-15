@@ -1,6 +1,6 @@
 import { Avatar, Box, Center, Container, createStyles, Group, Image, Stack, Text, Title } from '@mantine/core';
 
-const GradientHeader = ({ color, image, title, subtitle, description }) => {
+const GradientHeader = ({ name, color, image, title, subtitle, description }) => {
 
     const useStyles = createStyles((theme, _params) => ({
         header: {
@@ -29,7 +29,7 @@ const GradientHeader = ({ color, image, title, subtitle, description }) => {
             <Group className={classes.alignEnd}>
                 <Avatar className={classes.userAvatar} size={150} src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=250&q=80' />
                 <Stack>
-                    <Title color='white'>hey, Txbi 👋🏽</Title>
+                    <Title color='white'>hey, {name} 👋🏽</Title>
                     <Text size='md' color='white'>welcome to Euphonia.</Text>
                 </Stack>
             </Group>
