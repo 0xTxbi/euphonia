@@ -5,7 +5,6 @@ import Footer from './MusicPlayer'
 import { useState } from 'react';
 
 const PlayerLayout = ({ children }) => {
-    const [opened, setOpened] = useState(false)
 
     return (
 
@@ -18,6 +17,7 @@ const PlayerLayout = ({ children }) => {
         </AppShell>
 
     )
+
 }
 
 export default PlayerLayout

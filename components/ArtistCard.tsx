@@ -18,7 +18,7 @@ const ArtistCard = ({ name, image }) => {
                 <Group position="apart" mt="md" mb="xs">
                     <Text weight={500}>{name}</Text>
                     <Badge color="blue" variant="light">
-                        Artist
+                        🔥
                     </Badge>
                 </Group>
 

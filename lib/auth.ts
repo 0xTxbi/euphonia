@@ -41,3 +41,11 @@ export const validateRoute = (handler) => {
     }
 
 }
+
+// Validate token
+export const validateToken = (token) => {
+
+    const user = jwt.verify(token, 'euphonia-dev')
+    return user
+
+}

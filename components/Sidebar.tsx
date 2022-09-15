@@ -11,11 +11,16 @@ import {
 import { IconHome, IconBooks, IconFileMusic, IconPlaylistAdd, IconVinyl } from '@tabler/icons';
 import { LinksGroup } from './CollapsibleLinks';
 import { usePlaylists } from '../hooks/usePlaylist';
+import { NextLink } from '@mantine/next';
 
 const useStyles = createStyles((theme, _params) => ({
     navbar: {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
         paddingBottom: 0,
+    },
+
+    unstyledLink: {
+        textDecoration: 'none'
     },
 
     header: {
@@ -57,7 +62,7 @@ const navLinks = [
     { link: '', label: 'Playlists', icon: IconFileMusic }
 ];
 
-const playListLinksRaw = []
+
 
 
 const Sidebar = () => {
@@ -65,14 +70,23 @@ const Sidebar = () => {
     const { classes } = useStyles();
     const { playlists, isLoading } = usePlaylists()
 
-    if (playlists.length !== 0) {
-        playlists.map((playlist) => {
-            playListLinksRaw.push({ id: playlist.id, link: '', label: playlist.name, icon: IconVinyl })
-        })
-    }
-
     const links = navLinks.map((link) => <LinksGroup {...link} key={link.label} />);
-    const playlistLinks = playListLinksRaw.map((playlist) => <LinksGroup {...playlist} key={playlist.id} />)
+    const playlistLinks = playlists.map((playlist) =>
+        <>
+            {console.log(playlist)}
+            <NextLink className={classes.unstyledLink} href={{
+                pathname: '/playlist/[id]',
+                query: { id: playlist.id }
+            }}>
+                <LinksGroup {...playlist} key={playlist.id} />
+            </NextLink>
+        </>
+
+    )
+
+    console.log(playlists)
+    console.log(playlistLinks)
+    // console.log(playlistLinks)
 
     return (
         <Navbar height="100%" width={{ sm: 300 }} p="md" className={classes.navbar}>

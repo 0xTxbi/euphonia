@@ -56,7 +56,6 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksG
         <Text<'a'>
             component="a"
             className={classes.link}
-            href={link.link}
             key={link.label}
             onClick={(event) => event.preventDefault()}
         >
