@@ -71,22 +71,16 @@ const Sidebar = () => {
     const { playlists, isLoading } = usePlaylists()
 
     const links = navLinks.map((link) => <LinksGroup {...link} key={link.label} />);
-    const playlistLinks = playlists.map((playlist) =>
-        <>
-            {console.log(playlist)}
-            <NextLink className={classes.unstyledLink} href={{
-                pathname: '/playlist/[id]',
-                query: { id: playlist.id }
-            }}>
-                <LinksGroup {...playlist} key={playlist.id} />
-            </NextLink>
-        </>
+    const playlistLinks = playlists.map((playlist) => (
 
-    )
+        <NextLink className={classes.unstyledLink} href={{
+            pathname: '/playlist/[id]',
+            query: { id: playlist.id }
+        }}>
+            <LinksGroup {...playlist} key={playlist.id} />
+        </NextLink>
 
-    console.log(playlists)
-    console.log(playlistLinks)
-    // console.log(playlistLinks)
+    ))
 
     return (
         <Navbar height="100%" width={{ sm: 300 }} p="md" className={classes.navbar}>

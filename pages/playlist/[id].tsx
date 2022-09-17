@@ -1,5 +1,6 @@
 import React from 'react'
 import PlaylistGradientHeader from '../../components/PlaylistGradientHeader';
+import SongsTable from '../../components/SongsTable';
 import { validateToken } from '../../lib/auth';
 import prisma from '../../lib/prisma';
 
@@ -29,11 +30,14 @@ const PlaylistSingleView = ({ playlistData }) => {
     const bgColor = generatePlaylistBG(playlistData?.id)
 
     return (
-        <PlaylistGradientHeader
-            name={playlistData?.name}
-            color={bgColor}
-            stats={playlistData?.songs?.length}
-        />
+        <>
+            <PlaylistGradientHeader
+                name={playlistData?.name}
+                color={bgColor}
+                stats={playlistData?.songs?.length}
+            />
+            <SongsTable songs={playlistData?.songs} />
+        </>
     )
 
 }
@@ -64,6 +68,7 @@ export const getServerSideProps = async ({ query, req }) => {
 
     return {
         props: {
+            isLoading: !playlistData,
             // create serialisable object
             playlistData: JSON.parse(JSON.stringify(playlistData))
         }

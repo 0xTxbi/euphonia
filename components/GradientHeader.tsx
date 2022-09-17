@@ -1,6 +1,6 @@
-import { Avatar, Box, Center, Container, createStyles, Group, Image, Stack, Text, Title } from '@mantine/core';
+import { Avatar, Box, createStyles, Group, Stack, Text, Title } from '@mantine/core';
 
-const GradientHeader = ({ name, color, image, title, subtitle, description }) => {
+const GradientHeader = ({ name }) => {
 
     const useStyles = createStyles((theme, _params) => ({
         header: {

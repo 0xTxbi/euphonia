@@ -1,6 +1,6 @@
-import { Avatar, Box, Center, Container, createStyles, Group, Image, Stack, Text, Title } from '@mantine/core';
+import { Box, createStyles, Group, Image, Stack, Text, Title } from '@mantine/core';
 
-const PlaylistGradientHeader = ({ name, color, stats, title, subtitle, description }) => {
+const PlaylistGradientHeader = ({ name, color, stats }) => {
 
     const useStyles = createStyles((theme, _params) => ({
         header: {
