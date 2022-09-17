@@ -3,6 +3,7 @@ import PlaylistGradientHeader from '../../components/PlaylistGradientHeader';
 import SongsTable from '../../components/SongsTable';
 import { validateToken } from '../../lib/auth';
 import prisma from '../../lib/prisma';
+import { useRouter } from 'next/router';
 
 // Generate random playlist background
 const generatePlaylistBG = (id) => {
@@ -44,13 +45,30 @@ const PlaylistSingleView = ({ playlistData }) => {
 
 export const getServerSideProps = async ({ query, req }) => {
 
-    // Get signed in user's id
-    const { id } = validateToken(req.cookies.EUPHONIA_ACCESS_TOKEN)
+    let user
+
+    try {
+
+        user = validateToken(req.cookies.EUPHONIA_ACCESS_TOKEN)
+
+
+    } catch (error) {
+
+        // redirect to login
+        return {
+            redirect: {
+                permanent: false,
+                destination: '/login'
+            }
+        }
+
+    }
+
     const [playlistData] = await prisma.playlist.findMany({
         where: {
             // parse query id as a number (prepend with [+])
             id: +query.id,
-            userId: id
+            userId: user.id
         },
         include: {
             songs: {
