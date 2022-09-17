@@ -1,9 +1,8 @@
-import {AppProps} from 'next/app';
-import {MantineProvider} from '@mantine/core';
+import { AppProps } from 'next/app';
+import { MantineProvider } from '@mantine/core';
 import PlayerLayout from '../components/PlayerLayout';
 
-export default function App(props: AppProps) {
-  const {Component, pageProps} = props;
+export default function App({ Component, pageProps }) {
 
   return (
 
