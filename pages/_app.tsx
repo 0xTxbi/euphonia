@@ -1,28 +1,31 @@
-import { AppProps } from 'next/app';
+import { StoreProvider } from 'easy-peasy';
 import { MantineProvider } from '@mantine/core';
 import PlayerLayout from '../components/PlayerLayout';
+import { store } from '../lib/store';
 
 export default function App({ Component, pageProps }) {
 
   return (
 
-    <MantineProvider
-      withGlobalStyles
-      withNormalizeCSS
-      theme={{
-        colorScheme: 'dark',
-      }}
-    >
-      {/* Display layout if page isn't an authentication page */}
-      {Component.isAuthPage ? (
-        <Component {...pageProps} />
-      ) : (
-        <PlayerLayout>
+    <StoreProvider store={store}>
+      <MantineProvider
+        withGlobalStyles
+        withNormalizeCSS
+        theme={{
+          colorScheme: 'dark',
+        }}
+      >
+        {/* Display layout if page isn't an authentication page */}
+        {Component.isAuthPage ? (
           <Component {...pageProps} />
-        </PlayerLayout>
-      )}
+        ) : (
+          <PlayerLayout>
+            <Component {...pageProps} />
+          </PlayerLayout>
+        )}
 
-    </MantineProvider>
+      </MantineProvider>
+    </StoreProvider>
 
   );
 }
