@@ -1,4 +1,4 @@
-import { Paper, Text, Group, Footer, Box, Image, ActionIcon, Title, Stack, Slider, Container } from '@mantine/core';
+import { Paper, Text, Group, Footer, Box, Image, ActionIcon, Title, Stack, Slider, Container, Center } from '@mantine/core';
 import { useState } from 'react';
 import {
     IconArrowsShuffle,
@@ -8,12 +8,17 @@ import {
     IconPlayerSkipForward,
     IconRepeat,
 } from '@tabler/icons';
-import ReactHowler from 'react-howler'
+import { useStoreState } from 'easy-peasy';
+import ReactHowler from 'react-howler';
 
 
-const MusicPlayer = ({ songs, currentSong }) => {
+const MusicPlayer = ({ songs }) => {
 
-    const [isPlaying, setIsPlaying] = useState(true)
+    // Song queue state
+    const songsToPlay = useStoreState((state: any) => state.currentSongs)
+    const singleSongToPlay = useStoreState((state: any) => state.currentSong)
+
+    const [isPlaying, setIsPlaying] = useState(false)
     const [songindex, setSongIndex] = useState(0)
     const [seek, setSeek] = useState(0)
     const [repeat, setRepeat] = useState(false)
@@ -38,22 +43,22 @@ const MusicPlayer = ({ songs, currentSong }) => {
     return (
         <Footer height='auto'>
             <Paper p="lg" shadow="md">
-                {/* <ReactHowler
+                <ReactHowler
                     playing={isPlaying}
-                    src={currentSong?.url}
-                /> */}
+                    src={singleSongToPlay?.url}
+                />
                 <Group position="apart" mb="xs">
                     <Box>
                         <Title order={4} weight={500}>
-                            Flashing Lights
+                            {singleSongToPlay?.name}
                         </Title>
                         <Text size="xs" weight={500}>
-                            Kanye West
+                            {singleSongToPlay?.artist}
                         </Text>
                     </Box>
 
                     <Container sx={{
-                        width: '50%'
+                        width: '70%'
                     }}>
                         <Stack spacing='sm'>
 

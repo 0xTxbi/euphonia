@@ -3,7 +3,6 @@ import PlaylistGradientHeader from '../../components/PlaylistGradientHeader';
 import SongsTable from '../../components/SongsTable';
 import { validateToken } from '../../lib/auth';
 import prisma from '../../lib/prisma';
-import { useRouter } from 'next/router';
 
 // Generate random playlist background
 const generatePlaylistBG = (id) => {
@@ -27,7 +26,6 @@ const generatePlaylistBG = (id) => {
 
 const PlaylistSingleView = ({ playlistData }) => {
 
-    console.log(playlistData)
     const bgColor = generatePlaylistBG(playlistData?.id)
 
     return (
@@ -37,7 +35,7 @@ const PlaylistSingleView = ({ playlistData }) => {
                 color={bgColor}
                 stats={playlistData?.songs?.length}
             />
-            <SongsTable songs={playlistData?.songs} />
+            <SongsTable songs={playlistData?.songs} color={bgColor} />
         </>
     )
 

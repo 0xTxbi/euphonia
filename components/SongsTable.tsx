@@ -1,7 +1,19 @@
-import { Box, createStyles, Table } from '@mantine/core';
+import { ActionIcon, Box, createStyles, Table } from '@mantine/core';
+import { IconPlayerPlay } from '@tabler/icons';
+import { useStoreActions } from 'easy-peasy';
 import { convertDuration, convertTime } from '../lib/converters';
 
-const SongsTable = ({ songs }) => {
+const SongsTable = ({ songs, color }) => {
+
+    const queueAllPlaylistSongs = useStoreActions((store: any) => store.changeCurrentSongs)
+    const queueSingleSong = useStoreActions((store: any) => store.changeCurrentSong)
+
+    const handleQueue = (activeSong?) => {
+
+        queueSingleSong(activeSong || songs[0])
+        queueAllPlaylistSongs(songs)
+
+    }
 
     const useStyles = createStyles((_params) => ({
 
@@ -14,7 +26,7 @@ const SongsTable = ({ songs }) => {
     const songsRow = []
     if (songs.length !== 0) {
         songs.map((songs) => {
-            songsRow.push({ id: songs.id, name: songs.name, duration: convertDuration(songs.duration), dateAdded: convertTime(songs.updatedAt) })
+            songsRow.push({ id: songs.id, url: songs.url, name: songs.name, artist: songs.artist.name, duration: convertDuration(songs.duration), dateAdded: convertTime(songs.updatedAt) })
         })
     }
 
@@ -23,6 +35,9 @@ const SongsTable = ({ songs }) => {
     return (
 
         <Box className={classes.paddedContainer}>
+            <ActionIcon variant='filled' sx={{ borderRadius: '100%', background: `${color}` }} onClick={() => handleQueue()}>
+                <IconPlayerPlay size={16} />
+            </ActionIcon>
             <Table verticalSpacing='md' horizontalSpacing='md' striped highlightOnHover>
                 <thead>
                     <tr>
@@ -34,7 +49,7 @@ const SongsTable = ({ songs }) => {
                 </thead>
                 <tbody>
                     {songsRow.map((song) => (
-                        <tr key={song.id}>
+                        <tr key={song.id} onClick={() => handleQueue(song)} >
                             <td>
                                 #{song.id}
                             </td>
