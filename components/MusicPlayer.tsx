@@ -1,5 +1,5 @@
 import { Paper, Text, Group, Footer, Box, Image, ActionIcon, Title, Stack, Slider, Container, Center } from '@mantine/core';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
     IconArrowsShuffle,
     IconPlayerPlay,
@@ -10,6 +10,7 @@ import {
 } from '@tabler/icons';
 import { useStoreState } from 'easy-peasy';
 import ReactHowler from 'react-howler';
+import { convertDuration } from '../lib/converters';
 
 
 const MusicPlayer = ({ songs }) => {
@@ -26,6 +27,26 @@ const MusicPlayer = ({ songs }) => {
     const [shuffle, setShuffle] = useState(false)
     const [songDuration, setSongDuration] = useState(0.00)
     const musicRef = useRef(null)
+
+    useEffect(() => {
+
+        let timerId
+
+        if (isPlaying && !isSeeking) {
+            const animationController = () => {
+                setSeek(musicRef.current.seek())
+                timerId = requestAnimationFrame(animationController)
+            }
+
+            timerId = requestAnimationFrame(animationController)
+
+            // end animation
+            return () => cancelAnimationFrame(timerId)
+        }
+
+        cancelAnimationFrame(timerId)
+
+    }, [isPlaying, isSeeking])
 
     // Event when song loads
     const onMusicLoad = () => {
@@ -180,6 +201,10 @@ const MusicPlayer = ({ songs }) => {
                                 onChange={onPlayerSeek}
                             />
                         </Stack>
+                        <Group position='apart'>
+                            <Text>{convertDuration(seek)}</Text>
+                            <Text>1:31</Text>
+                        </Group>
                     </Container>
 
                     <Box sx={{

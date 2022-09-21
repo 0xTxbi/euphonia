@@ -9,7 +9,7 @@ export const convertTime = (unixTime) => {
 // convert track duration to readable format
 export const convertDuration = (trackDuration) => {
     let minutes = Math.floor(trackDuration / 60);
-    let seconds = ((trackDuration % 60) / 10).toFixed(0);
+    let seconds = ((trackDuration % 60) / 100).toFixed(0);
 
     return (
         parseInt(seconds) == 60 ?
