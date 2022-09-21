@@ -26,7 +26,14 @@ const SongsTable = ({ songs, color }) => {
     const songsRow = []
     if (songs.length !== 0) {
         songs.map((songs) => {
-            songsRow.push({ id: songs.id, url: songs.url, name: songs.name, artist: songs.artist.name, duration: convertDuration(songs.duration), dateAdded: convertTime(songs.updatedAt) })
+            songsRow.push({
+                id: songs.id,
+                url: songs.url,
+                name: songs.name,
+                artist: songs.artist.name,
+                duration: convertDuration(songs.duration),
+                dateAdded: convertTime(songs.updatedAt)
+            })
         })
     }
 
@@ -35,7 +42,7 @@ const SongsTable = ({ songs, color }) => {
     return (
 
         <Box className={classes.paddedContainer}>
-            <ActionIcon variant='filled' sx={{ borderRadius: '100%', background: `${color}` }} onClick={() => handleQueue()}>
+            <ActionIcon variant='filled' sx={{ borderRadius: '100%', background: `${color}` }} onClick={handleQueue}>
                 <IconPlayerPlay size={16} />
             </ActionIcon>
             <Table verticalSpacing='md' horizontalSpacing='md' striped highlightOnHover>
