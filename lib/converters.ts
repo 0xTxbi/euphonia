@@ -1,3 +1,5 @@
+import formatDuration from "format-duration";
+
 // convert from unix to timestamp
 export const convertTime = (unixTime) => {
 
@@ -7,14 +9,8 @@ export const convertTime = (unixTime) => {
 };
 
 // convert track duration to readable format
-export const convertDuration = (trackDuration) => {
-    let minutes = Math.floor(trackDuration / 60);
-    let seconds = ((trackDuration % 60) / 100).toFixed(0);
+export const convertDuration = (trackDuration = 0) => {
 
-    return (
-        parseInt(seconds) == 60 ?
-            (minutes + 1) + ":00" :
-            minutes + ":" + (parseInt(seconds) < 10 ? "0" : "") + seconds
-    );
+    return formatDuration(trackDuration * 1000)
 
 }

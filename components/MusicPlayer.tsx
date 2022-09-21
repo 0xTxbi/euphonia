@@ -202,8 +202,8 @@ const MusicPlayer = ({ songs }) => {
                             />
                         </Stack>
                         <Group position='apart'>
-                            <Text>{convertDuration(seek)}</Text>
-                            <Text>1:31</Text>
+                            <Text size='xs'>{convertDuration(seek)}</Text>
+                            <Text size='xs'>{convertDuration(songDuration)}</Text>
                         </Group>
                     </Container>
 

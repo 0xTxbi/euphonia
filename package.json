@@ -20,6 +20,7 @@
     "bcrypt": "^5.0.1",
     "cookie": "^0.5.0",
     "easy-peasy": "^5.1.0",
+    "format-duration": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "next": "12.2.5",
     "postcss": "^8.4.16",
