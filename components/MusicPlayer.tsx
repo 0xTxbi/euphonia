@@ -8,7 +8,7 @@ import {
     IconPlayerSkipForward,
     IconRepeat,
 } from '@tabler/icons';
-import { useStoreState } from 'easy-peasy';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 import ReactHowler from 'react-howler';
 import { convertDuration } from '../lib/converters';
 
@@ -20,13 +20,15 @@ const MusicPlayer = ({ songs }) => {
     const singleSongToPlay = useStoreState((state: any) => state.currentSong)
 
     const [isPlaying, setIsPlaying] = useState(false)
-    const [songindex, setSongIndex] = useState(0)
+    const [songIndex, setSongIndex] = useState(songsToPlay.findIndex((song) => song.id === singleSongToPlay.id))
     const [seek, setSeek] = useState(0)
     const [isSeeking, setIsSeeking] = useState(false)
     const [repeat, setRepeat] = useState(false)
     const [shuffle, setShuffle] = useState(false)
     const [songDuration, setSongDuration] = useState(0.00)
     const musicRef = useRef(null)
+    const repeatFnRef = useRef(repeat)
+    const setCurrentSong = useStoreActions((state: any) => state.changeCurrentSong)
 
     useEffect(() => {
 
@@ -48,6 +50,20 @@ const MusicPlayer = ({ songs }) => {
 
     }, [isPlaying, isSeeking])
 
+    // Change song queue index
+    useEffect(() => {
+
+        setCurrentSong(songsToPlay[songIndex])
+
+    }, [songIndex, setCurrentSong, songsToPlay])
+
+    // Keep repeat reference and state in sync
+    useEffect(() => {
+
+        repeatFnRef.current = repeat
+
+    }, [repeat])
+
     // Event when song loads
     const onMusicLoad = () => {
 
@@ -60,7 +76,7 @@ const MusicPlayer = ({ songs }) => {
     const onMusicEnd = () => {
 
         // first check if song repeat is enabled
-        if (repeat) {
+        if (repeatFnRef.current) {
             // reset player progress back to 0
             setSeek(0)
             musicRef.current.seek(0)
@@ -128,7 +144,7 @@ const MusicPlayer = ({ songs }) => {
 
     }
 
-    console.log(seek)
+    console.log(songIndex)
 
     return (
         <Footer height='auto'>
@@ -186,7 +202,7 @@ const MusicPlayer = ({ songs }) => {
                             </Container>
 
                             <Slider label={null} min={0}
-                                max={songDuration ? songDuration.toFixed(2) : 0}
+                                max={songDuration ? songDuration : 0}
                                 value={seek}
                                 styles={(theme) => ({
                                     thumb: {
