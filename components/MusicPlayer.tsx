@@ -1,4 +1,16 @@
-import { Paper, Text, Group, Footer, Box, Image, ActionIcon, Title, Stack, Slider, Container, Center } from '@mantine/core';
+import {
+    Paper,
+    Text,
+    Group,
+    Footer,
+    Box,
+    Image,
+    ActionIcon,
+    Title,
+    Stack,
+    Slider,
+    Container,
+} from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
 import {
     IconArrowsShuffle,
@@ -13,13 +25,13 @@ import ReactHowler from 'react-howler';
 import { convertDuration } from '../lib/converters';
 
 
-const MusicPlayer = ({ songs }) => {
+const MusicPlayer = () => {
 
     // Song queue state
     const songsToPlay = useStoreState((state: any) => state.currentSongs)
     const singleSongToPlay = useStoreState((state: any) => state.currentSong)
 
-    const [isPlaying, setIsPlaying] = useState(false)
+    const [isPlaying, setIsPlaying] = useState(true)
     const [songIndex, setSongIndex] = useState(songsToPlay.findIndex((song) => song.id === singleSongToPlay.id))
     const [seek, setSeek] = useState(0)
     const [isSeeking, setIsSeeking] = useState(false)
@@ -144,17 +156,15 @@ const MusicPlayer = ({ songs }) => {
 
     }
 
-    console.log(songIndex)
-
     return (
         <Footer height='auto'>
             <Paper p="lg" shadow="md">
-                {singleSongToPlay !== null ? (
+                {singleSongToPlay !== null && songsToPlay.length >= 1 ? (
                     <ReactHowler
                         ref={musicRef}
                         onLoad={onMusicLoad}
                         onEnd={onMusicEnd}
-                        src={singleSongToPlay?.url}
+                        src={singleSongToPlay?.url || songsToPlay}
                         playing={isPlaying}
                     />
                 ) : (

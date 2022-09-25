@@ -8,22 +8,7 @@ const SongsTable = ({ songs, color }) => {
     const queueAllPlaylistSongs = useStoreActions((store: any) => store.changeCurrentSongs)
     const queueSingleSong = useStoreActions((store: any) => store.changeCurrentSong)
 
-    const handleQueue = (activeSong?) => {
-
-        queueSingleSong(activeSong || songs[0])
-        queueAllPlaylistSongs(songs)
-
-    }
-
-    const useStyles = createStyles((_params) => ({
-
-        paddedContainer: {
-            margin: '2rem 0 2rem 0'
-        }
-
-    }))
-
-    const songsRow = []
+    let songsRow = []
     if (songs.length !== 0) {
         songs.map((songs) => {
             songsRow.push({
@@ -37,12 +22,33 @@ const SongsTable = ({ songs, color }) => {
         })
     }
 
+    const addSingleToQueue = (activeSong) => {
+
+        queueSingleSong(activeSong)
+
+    }
+
+    const addMultipleToQueue = () => {
+
+        queueAllPlaylistSongs(songsRow)
+        queueSingleSong(songsRow[0])
+
+    }
+
+    const useStyles = createStyles((_params) => ({
+
+        paddedContainer: {
+            margin: '2rem 0 2rem 0'
+        }
+
+    }))
+
     const { classes } = useStyles()
 
     return (
 
         <Box className={classes.paddedContainer}>
-            <ActionIcon variant='filled' sx={{ borderRadius: '100%', background: `${color}` }} onClick={handleQueue}>
+            <ActionIcon variant='filled' sx={{ borderRadius: '100%', background: `${color}` }} onClick={addMultipleToQueue}>
                 <IconPlayerPlay size={16} />
             </ActionIcon>
             <Table verticalSpacing='md' horizontalSpacing='md' striped highlightOnHover>
@@ -56,7 +62,7 @@ const SongsTable = ({ songs, color }) => {
                 </thead>
                 <tbody>
                     {songsRow.map((song) => (
-                        <tr key={song.id} onClick={() => handleQueue(song)} >
+                        <tr key={song.id} onClick={() => addSingleToQueue(song)} >
                             <td>
                                 #{song.id}
                             </td>
