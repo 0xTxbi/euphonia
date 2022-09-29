@@ -21,7 +21,7 @@ import {
     IconRepeat,
 } from '@tabler/icons';
 import { useStoreState, useStoreActions } from 'easy-peasy';
-import { convertDuration, convDur } from '../lib/converters';
+import { convertDuration } from '../lib/converters';
 import ReactPlayer from 'react-player';
 
 
