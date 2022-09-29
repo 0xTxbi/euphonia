@@ -21,8 +21,8 @@ import {
     IconRepeat,
 } from '@tabler/icons';
 import { useStoreState, useStoreActions } from 'easy-peasy';
-import ReactHowler from 'react-howler';
-import { convertDuration } from '../lib/converters';
+import { convertDuration, convDur } from '../lib/converters';
+import ReactPlayer from 'react-player';
 
 
 const MusicPlayer = () => {
@@ -31,7 +31,7 @@ const MusicPlayer = () => {
     const songsToPlay = useStoreState((state: any) => state.currentSongs)
     const singleSongToPlay = useStoreState((state: any) => state.currentSong)
 
-    const [isPlaying, setIsPlaying] = useState(true)
+    const [isPlaying, setIsPlaying] = useState(false)
     const [songIndex, setSongIndex] = useState(songsToPlay.findIndex((song) => song.id === singleSongToPlay.id))
     const [seek, setSeek] = useState(0)
     const [isSeeking, setIsSeeking] = useState(false)
@@ -42,25 +42,25 @@ const MusicPlayer = () => {
     const repeatFnRef = useRef(repeat)
     const setCurrentSong = useStoreActions((state: any) => state.changeCurrentSong)
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        let timerId
+    //     let timerId
 
-        if (isPlaying && !isSeeking) {
-            const animationController = () => {
-                setSeek(musicRef.current.seek())
-                timerId = requestAnimationFrame(animationController)
-            }
+    //     if (isPlaying && !isSeeking) {
+    //         const animationController = () => {
+    //             setSeek(musicRef.current.seek())
+    //             timerId = requestAnimationFrame(animationController)
+    //         }
 
-            timerId = requestAnimationFrame(animationController)
+    //         timerId = requestAnimationFrame(animationController)
 
-            // end animation
-            return () => cancelAnimationFrame(timerId)
-        }
+    //         // end animation
+    //         return () => cancelAnimationFrame(timerId)
+    //     }
 
-        cancelAnimationFrame(timerId)
+    //     cancelAnimationFrame(timerId)
 
-    }, [isPlaying, isSeeking])
+    // }, [isPlaying, isSeeking])
 
     // Change song queue index
     useEffect(() => {
@@ -76,10 +76,40 @@ const MusicPlayer = () => {
 
     }, [repeat])
 
+    const handlePlay = () => {
+        console.log('onPlay')
+        setIsPlaying(true)
+    }
+
+    const handlePause = () => {
+        console.log('onPause')
+        setIsPlaying(false)
+    };
+
+    const handleSeekMouseDown = () => {
+        setIsSeeking(true)
+    }
+
+    const handleSeekChange = (e) => {
+        setSeek(e)
+    }
+
+    const handleSeekMouseUp = (e) => {
+        setIsSeeking(false)
+        musicRef.current.seekTo(parseFloat(e))
+    }
+
+    const handleProgress = (state) => {
+        if (!isSeeking) {
+            setSeek(state.playedSeconds)
+        }
+    }
+
     // Event when song loads
     const onMusicLoad = () => {
 
-        const musicDuration = musicRef.current.duration()
+        console.log('music is loaded')
+        const musicDuration = musicRef.current.getDuration()
         setSongDuration(musicDuration)
 
     }
@@ -99,17 +129,9 @@ const MusicPlayer = () => {
     }
 
     // Change play state
-    const modifyPlayState = (playState) => {
+    const modifyPlayState = () => {
 
-        setIsPlaying(playState)
-
-    }
-
-    // Event when seek bar is modified/dragged
-    const onPlayerSeek = (e) => {
-
-        setSeek(parseFloat(e))
-        musicRef.current.seek(e)
+        setIsPlaying(!isPlaying)
 
     }
 
@@ -156,20 +178,32 @@ const MusicPlayer = () => {
 
     }
 
+    // console.log(musicRef)
+    // console.log(isPlaying)
+    console.log(singleSongToPlay)
+    console.log(singleSongToPlay?.url)
+    // console.log(seek)
+    // console.log(isSeeking)
+
     return (
         <Footer height='auto'>
             <Paper p="lg" shadow="md">
-                {singleSongToPlay !== null && songsToPlay.length >= 1 ? (
-                    <ReactHowler
-                        ref={musicRef}
-                        onLoad={onMusicLoad}
-                        onEnd={onMusicEnd}
-                        src={singleSongToPlay?.url || songsToPlay}
-                        playing={isPlaying}
-                    />
-                ) : (
-                    null
-                )}
+
+                <ReactPlayer
+                    ref={musicRef}
+                    url={singleSongToPlay?.url}
+                    onReady={onMusicLoad}
+                    loop={false}
+                    controls={false}
+                    playing={isPlaying}
+                    style={{
+                        display: 'none'
+                    }}
+                    onPlay={handlePlay}
+                    onPause={handlePause}
+                    onProgress={handleProgress}
+                />
+
                 <Group position="apart" mb="xs">
                     <Box>
                         <Title order={4} weight={500}>
@@ -194,11 +228,11 @@ const MusicPlayer = () => {
                                         <IconPlayerSkipBack size={15} />
                                     </ActionIcon>
                                     {isPlaying ? (
-                                        <ActionIcon onClick={() => modifyPlayState(false)}>
+                                        <ActionIcon onClick={() => modifyPlayState()}>
                                             <IconPlayerPause size={25} />
                                         </ActionIcon>
                                     ) : (
-                                        <ActionIcon onClick={() => modifyPlayState(true)}>
+                                        <ActionIcon onClick={() => modifyPlayState()}>
                                             <IconPlayerPlay size={25} />
                                         </ActionIcon>
                                     )}
@@ -211,8 +245,9 @@ const MusicPlayer = () => {
                                 </Group>
                             </Container>
 
-                            <Slider label={null} min={0}
-                                max={songDuration ? songDuration : 0}
+                            <Slider
+                                min={0} max={songDuration}
+                                label={null}
                                 value={seek}
                                 styles={(theme) => ({
                                     thumb: {
@@ -223,8 +258,11 @@ const MusicPlayer = () => {
                                         boxShadow: theme.shadows.sm,
                                     },
                                 })}
-
-                                onChange={onPlayerSeek}
+                                onChange={(e) => {
+                                    handleSeekChange(e)
+                                }}
+                                onMouseDown={handleSeekMouseDown}
+                                onMouseUp={handleSeekMouseUp}
                             />
                         </Stack>
                         <Group position='apart'>
