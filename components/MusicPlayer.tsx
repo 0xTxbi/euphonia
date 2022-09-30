@@ -42,26 +42,6 @@ const MusicPlayer = () => {
     const repeatFnRef = useRef(repeat)
     const setCurrentSong = useStoreActions((state: any) => state.changeCurrentSong)
 
-    // useEffect(() => {
-
-    //     let timerId
-
-    //     if (isPlaying && !isSeeking) {
-    //         const animationController = () => {
-    //             setSeek(musicRef.current.seek())
-    //             timerId = requestAnimationFrame(animationController)
-    //         }
-
-    //         timerId = requestAnimationFrame(animationController)
-
-    //         // end animation
-    //         return () => cancelAnimationFrame(timerId)
-    //     }
-
-    //     cancelAnimationFrame(timerId)
-
-    // }, [isPlaying, isSeeking])
-
     // Change song queue index
     useEffect(() => {
 
@@ -76,29 +56,40 @@ const MusicPlayer = () => {
 
     }, [repeat])
 
+    // Change play state
+    const togglePlayState = () => {
+        setIsPlaying(!isPlaying)
+
+    }
+
+    // play song
     const handlePlay = () => {
-        console.log('onPlay')
         setIsPlaying(true)
     }
 
+    // pause song
     const handlePause = () => {
-        console.log('onPause')
         setIsPlaying(false)
     };
 
+    // trigger when slider is being dragged
     const handleSeekMouseDown = () => {
         setIsSeeking(true)
     }
 
+    // fire during slider drag
     const handleSeekChange = (e) => {
         setSeek(e)
+        musicRef.current.seekTo(parseFloat(e), 'seconds')
     }
 
+    // trigger when slider drag ends
     const handleSeekMouseUp = (e) => {
         setIsSeeking(false)
         musicRef.current.seekTo(parseFloat(e))
     }
 
+    // sync slider progress
     const handleProgress = (state) => {
         if (!isSeeking) {
             setSeek(state.playedSeconds)
@@ -107,83 +98,56 @@ const MusicPlayer = () => {
 
     // Event when song loads
     const onMusicLoad = () => {
-
-        console.log('music is loaded')
         const musicDuration = musicRef.current.getDuration()
         setSongDuration(musicDuration)
-
     }
 
     // Event when song ends
-    const onMusicEnd = () => {
+    // const onMusicEnd = () => {
 
-        // first check if song repeat is enabled
-        if (repeatFnRef.current) {
-            // reset player progress back to 0
-            setSeek(0)
-            musicRef.current.seek(0)
-        } else {
-            nextSong()
-        }
+    //     // first check if song repeat is enabled
+    //     if (repeatFnRef.current) {
+    //         // reset player progress back to 0
+    //         setSeek(0)
+    //         musicRef.current.seek(0)
+    //     } else {
+    //         nextSong()
+    //     }
 
-    }
-
-    // Change play state
-    const modifyPlayState = () => {
-
-        setIsPlaying(!isPlaying)
-
-    }
+    // }
 
     // Enable/Disable shuffle
     const modifyShuffleState = () => {
-
         setShuffle((shuffleState) => !shuffleState)
-
     }
 
     // Enable/disable repeat
     const modifyRepeatState = () => {
-
         setRepeat((repeatState) => !repeatState)
-
     }
 
     // Previous song
     const prevSong = () => {
-
         setSongIndex((state) => {
             return state ? state - 1 : songsToPlay.length - 1
         })
-
     }
 
     // Next song
     const nextSong = () => {
-
         setSongIndex((state: any) => {
             // first check if shuffle is enabled
             if (shuffle) {
-
                 // shuffle algorithm
                 const nextQueue = Math.floor(Math.random() * songsToPlay.length)
                 if (nextQueue === state) {
                     return nextSong()
                 }
-
             } else {
                 return state === songsToPlay.length - 1 ? 0 : state + 1
             }
         })
-
     }
-
-    // console.log(musicRef)
-    // console.log(isPlaying)
-    console.log(singleSongToPlay)
-    console.log(singleSongToPlay?.url)
-    // console.log(seek)
-    // console.log(isSeeking)
 
     return (
         <Footer height='auto'>
@@ -228,11 +192,11 @@ const MusicPlayer = () => {
                                         <IconPlayerSkipBack size={15} />
                                     </ActionIcon>
                                     {isPlaying ? (
-                                        <ActionIcon onClick={() => modifyPlayState()}>
+                                        <ActionIcon onClick={() => togglePlayState()}>
                                             <IconPlayerPause size={25} />
                                         </ActionIcon>
                                     ) : (
-                                        <ActionIcon onClick={() => modifyPlayState()}>
+                                        <ActionIcon onClick={() => togglePlayState()}>
                                             <IconPlayerPlay size={25} />
                                         </ActionIcon>
                                     )}
