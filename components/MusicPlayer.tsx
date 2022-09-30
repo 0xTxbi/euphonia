@@ -103,18 +103,14 @@ const MusicPlayer = () => {
     }
 
     // Event when song ends
-    // const onMusicEnd = () => {
-
-    //     // first check if song repeat is enabled
-    //     if (repeatFnRef.current) {
-    //         // reset player progress back to 0
-    //         setSeek(0)
-    //         musicRef.current.seek(0)
-    //     } else {
-    //         nextSong()
-    //     }
-
-    // }
+    const onMusicEnd = () => {
+        // first check if repeat is enabled
+        if (repeatFnRef.current) {
+            setIsPlaying(true)
+        } else {
+            nextSong()
+        }
+    }
 
     // Enable/Disable shuffle
     const modifyShuffleState = () => {
@@ -157,7 +153,7 @@ const MusicPlayer = () => {
                     ref={musicRef}
                     url={singleSongToPlay?.url}
                     onReady={onMusicLoad}
-                    loop={false}
+                    loop={repeat}
                     controls={false}
                     playing={isPlaying}
                     style={{
@@ -165,6 +161,7 @@ const MusicPlayer = () => {
                     }}
                     onPlay={handlePlay}
                     onPause={handlePause}
+                    onEnded={onMusicEnd}
                     onProgress={handleProgress}
                 />
 
