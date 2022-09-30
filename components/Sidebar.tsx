@@ -7,11 +7,13 @@ import {
     ScrollArea,
     Divider,
     LoadingOverlay,
+    NavLink,
 } from '@mantine/core';
-import { IconHome, IconBooks, IconFileMusic, IconPlaylistAdd, IconVinyl } from '@tabler/icons';
+import { IconHome, IconBooks, IconFileMusic, IconPlaylistAdd } from '@tabler/icons';
 import { LinksGroup } from './CollapsibleLinks';
 import { usePlaylists } from '../hooks/usePlaylist';
 import { NextLink } from '@mantine/next';
+import Link from 'next/link';
 
 const useStyles = createStyles((theme, _params) => ({
     navbar: {
@@ -55,12 +57,12 @@ const useStyles = createStyles((theme, _params) => ({
     },
 }))
 
-const navLinks = [
-    { link: '', label: 'Home', icon: IconHome },
-    { link: '', label: 'Your Library', icon: IconBooks },
-    { link: '', label: 'Create Playlist', icon: IconPlaylistAdd },
-    { link: '', label: 'Playlists', icon: IconFileMusic }
-];
+// const navLinks = [
+//     { link: '/', label: 'Home', icon: IconHome },
+//     { link: '', label: 'Your Library', icon: IconBooks },
+//     { link: '', label: 'Create Playlist', icon: IconPlaylistAdd },
+//     { link: '', label: 'Playlists', icon: IconFileMusic }
+// ];
 
 
 
@@ -70,11 +72,11 @@ const Sidebar = () => {
     const { classes } = useStyles();
     const { playlists, isLoading } = usePlaylists()
 
-    const links = navLinks.map((link) => <LinksGroup {...link} key={link.label} />);
+    // const links = navLinks.map((link) => <LinksGroup {...link} key={link.label} />);
     const playlistLinks = playlists.map((playlist) => (
 
         <NextLink className={classes.unstyledLink} href={{
-            pathname: '/playlist/[id]',
+            pathname: '/playlists/[id]',
             query: { id: playlist.id }
         }}>
             <LinksGroup {...playlist} key={playlist.id} />
@@ -92,7 +94,29 @@ const Sidebar = () => {
             </Navbar.Section>
 
             <Navbar.Section grow className={classes.links} component={ScrollArea}>
-                <div className={classes.linksInner}>{links}</div>
+                <div className={classes.linksInner}>
+                    <Link href='/' passHref>
+                        <NavLink
+                            component='a'
+                            label='Home'
+                            icon={<IconHome size={16} stroke={1.5} />}
+                        />
+                    </Link>
+                    <Link href='/library' passHref>
+                        <NavLink
+                            component='a'
+                            label='Your Library'
+                            icon={<IconHome size={16} stroke={1.5} />}
+                        />
+                    </Link>
+                    <Link href='/playlists' passHref>
+                        <NavLink
+                            component='a'
+                            label='Playlists'
+                            icon={<IconHome size={16} stroke={1.5} />}
+                        />
+                    </Link>
+                </div>
                 <Divider />
                 <ScrollArea className={classes.customScrollArea}>
                     {isLoading ? (

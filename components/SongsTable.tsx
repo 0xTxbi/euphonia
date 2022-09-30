@@ -2,7 +2,6 @@ import { ActionIcon, Box, createStyles, Table } from '@mantine/core';
 import { IconPlayerPlay } from '@tabler/icons';
 import { useStoreActions } from 'easy-peasy';
 import { convertDuration, convertTime } from '../lib/converters';
-import { useState } from 'react';
 
 const SongsTable = ({ songs, color }) => {
 
@@ -46,8 +45,6 @@ const SongsTable = ({ songs, color }) => {
     }))
 
     const { classes } = useStyles()
-
-    console.log(songsRow)
 
     return (
 

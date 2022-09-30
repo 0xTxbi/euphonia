@@ -124,7 +124,6 @@ const MusicPlayer = () => {
     // Next song
     const nextSong = () => {
         setSongIndex((state: any) => {
-            console.log(state)
             // first check if shuffle is enabled
             if (shuffle) {
                 // shuffle algorithm
