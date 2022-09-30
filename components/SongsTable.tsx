@@ -2,11 +2,13 @@ import { ActionIcon, Box, createStyles, Table } from '@mantine/core';
 import { IconPlayerPlay } from '@tabler/icons';
 import { useStoreActions } from 'easy-peasy';
 import { convertDuration, convertTime } from '../lib/converters';
+import { useState } from 'react';
 
 const SongsTable = ({ songs, color }) => {
 
     const queueAllPlaylistSongs = useStoreActions((store: any) => store.changeCurrentSongs)
     const queueSingleSong = useStoreActions((store: any) => store.changeCurrentSong)
+    // const [queue, setQueue] = useState([])
 
     let songsRow = []
     if (songs.length !== 0) {
@@ -23,17 +25,17 @@ const SongsTable = ({ songs, color }) => {
     }
 
     const addSingleToQueue = (activeSong) => {
-
         queueSingleSong(activeSong)
-
     }
 
     const addMultipleToQueue = () => {
-
+        let queueStore = []
+        songsRow.map((song) => queueStore.push(song.url))
+        // setQueue([...queue, queueStore])
         queueAllPlaylistSongs(songsRow)
         queueSingleSong(songsRow[0])
-
     }
+
 
     const useStyles = createStyles((_params) => ({
 
@@ -44,6 +46,8 @@ const SongsTable = ({ songs, color }) => {
     }))
 
     const { classes } = useStyles()
+
+    console.log(songsRow)
 
     return (
 
@@ -62,7 +66,7 @@ const SongsTable = ({ songs, color }) => {
                 </thead>
                 <tbody>
                     {songsRow.map((song) => (
-                        <tr key={song.id} onClick={() => addSingleToQueue(song)} >
+                        <tr key={song.id} onClick={() => addSingleToQueue(song?.url)} >
                             <td>
                                 #{song.id}
                             </td>

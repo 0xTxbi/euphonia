@@ -40,14 +40,6 @@ const MusicPlayer = () => {
     const [songDuration, setSongDuration] = useState(0.00)
     const musicRef = useRef(null)
     const repeatFnRef = useRef(repeat)
-    const setCurrentSong = useStoreActions((state: any) => state.changeCurrentSong)
-
-    // Change song queue index
-    useEffect(() => {
-
-        setCurrentSong(songsToPlay[songIndex])
-
-    }, [songIndex, setCurrentSong, songsToPlay])
 
     // Keep repeat reference and state in sync
     useEffect(() => {
@@ -132,6 +124,7 @@ const MusicPlayer = () => {
     // Next song
     const nextSong = () => {
         setSongIndex((state: any) => {
+            console.log(state)
             // first check if shuffle is enabled
             if (shuffle) {
                 // shuffle algorithm
@@ -185,7 +178,7 @@ const MusicPlayer = () => {
                                     <ActionIcon color={shuffle ? 'gray.0' : 'gray.7'} onClick={modifyShuffleState}>
                                         <IconArrowsShuffle size={12} />
                                     </ActionIcon>
-                                    <ActionIcon onClick={prevSong}>
+                                    <ActionIcon>
                                         <IconPlayerSkipBack size={15} />
                                     </ActionIcon>
                                     {isPlaying ? (
