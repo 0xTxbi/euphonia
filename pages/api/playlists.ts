@@ -5,7 +5,10 @@ export default validateRoute(async (req, res, user) => {
 
     const playlists = await prisma.playlist.findMany({
         where: {
-
+        },
+        include: {
+            songs: {
+            }
         },
         orderBy: {
             name: 'asc'
