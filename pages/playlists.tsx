@@ -1,10 +1,13 @@
-import { Box, createStyles, SimpleGrid, Skeleton } from '@mantine/core';
+import { Box, createStyles, SimpleGrid } from '@mantine/core';
 import { NextLink } from '@mantine/next';
+import AddPlayListCard from '../components/AddPlayListCard';
 import { PlaylistCard } from '../components/PlaylistCard';
 import usePlaylists from '../hooks/usePlaylist';
+import { useState } from 'react';
 
 const Playlists = () => {
 
+    const [modalOpen, setModalOpen] = useState(false)
     const useStyles = createStyles((_params) => ({
 
         paddedContainer: {
@@ -24,6 +27,8 @@ const Playlists = () => {
 
         <Box className={classes.paddedContainer}>
             <SimpleGrid cols={4} spacing='xl'>
+
+                <AddPlayListCard />
 
                 {playlistsSummary.map((playlist) => (
 
