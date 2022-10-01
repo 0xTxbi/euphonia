@@ -63,14 +63,13 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 interface PlaylistCardProps {
     id: number;
-    link: string;
     image: string;
     name: string;
     numberOfSongs: string;
     dateAdded: number;
 }
 
-export function PlaylistCard({ id, image, name, numberOfSongs, dateAdded, link }: PlaylistCardProps) {
+export function PlaylistCard({ id, image, name, numberOfSongs, dateAdded }: PlaylistCardProps) {
     const { classes, theme } = useStyles();
 
     return (
@@ -80,7 +79,6 @@ export function PlaylistCard({ id, image, name, numberOfSongs, dateAdded, link }
             className={classes.card}
             radius="md"
             component="a"
-            href={link}
             target="_blank"
         >
             <div className={classes.image} style={{ backgroundImage: `url(${image})` }} />
