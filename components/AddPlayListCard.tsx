@@ -1,10 +1,9 @@
 import { Button, Center, createStyles, Modal, TextInput, Group } from '@mantine/core';
-import { IconPlus } from '@tabler/icons';
+import { showNotification, updateNotification } from '@mantine/notifications';
+import { IconCheck, IconPlus } from '@tabler/icons';
 import { useState } from 'react';
-import prisma from '../lib/prisma';
 import useUser from '../hooks/useUser';
 import { managePlaylist } from '../lib/mutations';
-import usePlaylists from '../hooks/usePlaylist';
 
 
 const AddPlayListCard = () => {
@@ -31,16 +30,33 @@ const AddPlayListCard = () => {
     }))
 
     const { userID } = useUser()
-    console.log(userID)
+    console.log(isLoading)
 
     // create playlist form handler
     const handleCreatePlaylist = async (e) => {
 
         e.preventDefault()
         setIsLoading(true)
-        setNewPlaylistName('')
+        showNotification({
+            id: 'load-data',
+            loading: true,
+            title: 'Creating playlist',
+            message: `${newPlaylistName} is being created. Hang tight`,
+            autoClose: false,
+            disallowClose: true,
+        });
         const newPlaylist = await managePlaylist('playlists/new', { newPlaylistName, userID })
+        setNewPlaylistName('')
         setIsLoading(false)
+        updateNotification({
+            id: 'load-data',
+            color: 'teal',
+            title: 'Playlist created',
+            message: `${newPlaylistName} has being created`,
+            icon: <IconCheck size={16} />,
+            autoClose: 5000,
+        })
+        setModalOpen(false)
 
     }
 
@@ -60,11 +76,13 @@ const AddPlayListCard = () => {
             {/* create playlist modal */}
             <Modal
                 centered
-                size='xl'
+                size='sm'
                 withCloseButton={false}
                 transition="fade"
-                transitionDuration={600}
-                transitionTimingFunction="ease-in"
+                transitionDuration={500}
+                transitionTimingFunction="ease-in-out"
+                overlayOpacity={0.60}
+                overlayBlur={3}
                 opened={modalOpen}
                 onClose={() => setModalOpen(false)}
                 title="Create a Playlist"
@@ -75,6 +93,7 @@ const AddPlayListCard = () => {
                         required
                         value={newPlaylistName}
                         onChange={(e) => setNewPlaylistName(e.target.value)}
+                        disabled={isLoading ? true : false}
                     />
 
 
