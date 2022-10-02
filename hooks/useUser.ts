@@ -7,6 +7,7 @@ export const useUser = () => {
 
     return {
         user: data,
+        userID: data?.id,
         isLoading: !data && !error,
         isError: error
     }
