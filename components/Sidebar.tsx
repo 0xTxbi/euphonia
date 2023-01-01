@@ -23,6 +23,11 @@ const useStyles = createStyles((theme, _params) => ({
         textDecoration: 'none'
     },
 
+    logo: {
+        textDecoration: 'none',
+        color: theme.colors.gray[0]
+    },
+
     header: {
         padding: theme.spacing.md,
         paddingTop: 0,
@@ -92,7 +97,9 @@ const Sidebar = () => {
         <Navbar height="100%" width={{ sm: 300 }} p="md" className={classes.navbar}>
             <Navbar.Section className={classes.header}>
                 <Group position="apart">
-                    <Title order={1} size="h3">Euphonia</Title>
+                    <NextLink href='/' passHref className={classes.logo}>
+                        <Title order={1} size="h3">Euphonia</Title>
+                    </NextLink>
                     <Code sx={{ fontWeight: 700 }}>v0.0.1</Code>
                 </Group>
             </Navbar.Section>

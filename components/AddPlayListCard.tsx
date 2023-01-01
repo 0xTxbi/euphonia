@@ -100,7 +100,7 @@ const AddPlayListCard = () => {
                     <Group position="right" mt="lg">
                         <Button
                             type="submit"
-                            leftIcon={<IconPlus />}
+                            leftIcon={<IconPlus size={20} />}
                             loading={isLoading}
                         >
                             Create Playlist

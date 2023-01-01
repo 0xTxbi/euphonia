@@ -138,7 +138,7 @@ const MusicPlayer = () => {
     }
 
     return (
-        <Footer height='auto'>
+        <Footer height='10vh'>
             <Paper p="lg" shadow="md">
 
                 <ReactPlayer

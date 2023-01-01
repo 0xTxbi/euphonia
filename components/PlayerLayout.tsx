@@ -1,6 +1,6 @@
 import React from 'react'
 import Sidebar from './Sidebar'
-import { AppShell } from '@mantine/core'
+import { AppShell, Box } from '@mantine/core'
 import Footer from './MusicPlayer'
 
 const PlayerLayout = ({ children }) => {
@@ -12,7 +12,12 @@ const PlayerLayout = ({ children }) => {
             navbar={<Sidebar />}
             footer={<Footer />}
         >
-            {children}
+            <Box sx={{
+                height: '88vh',
+                overflow: 'scroll'
+            }}>
+                {children}
+            </Box>
         </AppShell>
 
     )
